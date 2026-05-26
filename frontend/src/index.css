@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* --- 1. CUSTOM VARIABLES FOR PREMIUM LOOK --- */
+@theme {
+  --color-brand-dark: #060912;
+  --color-brand-navy: #0B1120;
+  --color-brand-electric: #3b82f6;
+  
+  --shadow-neon-blue: 0 0 15px rgba(59, 130, 246, 0.5);
+  --shadow-premium-glass: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui;
+}
+
+/* --- 2. GLOBAL RESET --- */
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #060912; /* Background ko dark karna sabse zaroori hai */
+    color: white;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* --- 3. GLASSMORPHISM UTILITIES --- */
+@layer components {
+  .premium-glass {
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(12px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .active-neon-glow {
+    background: rgba(59, 130, 246, 0.1) !important;
+    box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05), 0 0 15px rgba(59, 130, 246, 0.1) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  }
+
+  /* Custom Scrollbar for Sidebar */
+  .custom-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+}
