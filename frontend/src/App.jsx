@@ -737,7 +737,7 @@ function App() {
               <h3 className="text-2xl font-black mb-10 text-slate-800 italic uppercase">Your History</h3>
               <div className="border-l-4 border-blue-50 pl-10 space-y-12">
                 <div className="relative">
-                  <div className="absolute -left-[54px] top-0 w-8 h-8 text-slate-950 rounded-full border-4 border-white shadow-lg"></div>
+                  <div className="absolute -left-[54px] top-0 w-8 h-8 bg-blue-600 rounded-full border-4 border-white shadow-lg"></div>
                   <h4 className="font-extrabold text-slate-800">New Incident Reported</h4>
                   <p className="text-sm text-slate-500">Trash collection issue at Main Market.</p>
                   <p className="text-[10px] text-slate-400 font-black uppercase mt-2">Just Now</p>
