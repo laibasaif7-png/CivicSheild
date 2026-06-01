@@ -263,7 +263,8 @@ function App() {
         .premium-glass { background: rgba(255, 255, 255, 0.03) !important; backdrop-filter: blur(12px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
         .active-neon-glow { background: rgba(59, 130, 246, 0.1) !important; box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05), 0 0 15px rgba(59, 130, 246, 0.1) !important; border: 1px solid rgba(59, 130, 246, 0.3) !important; }
         .sidebar-bg { background: linear-gradient(180deg, #060912 0%, #0B1120 100%) !important; }
-        .main-glass { background: rgba(248, 250, 252, 0.9) !important; backdrop-filter: blur(25px); border-top-left-radius: 3rem; border-bottom-left-radius: 3rem; }
+        .main-glass { background: rgba(248, 250, 252, 0.9) !important; backdrop-filter: blur(25px); border-top-left-radius: 0; border-bottom-left-radius: 0; }
+        .main-glass-desktop { border-top-left-radius: 3rem !important; border-bottom-left-radius: 3rem !important; }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
       `}</style>
@@ -315,7 +316,7 @@ function App() {
       </aside>
 
       {/* --- MAIN CONTENT --- */}
-      <main className="flex-1 overflow-y-auto h-screen p-8 lg:p-12 custom-scroll z-10 main-glass shadow-[-20px_0_50px_rgba(0,0,0,0.2)]">
+      <main className="flex-1 overflow-y-auto h-screen p-8 lg:p-12 custom-scroll z-10 main-glass shadow-[-20px_0_50px_rgba(0,0,0,0.2)] main-glass-desktop pb-24 lg:pb-12">
 
         <header className="flex flex-col md:flex-row justify-between items-start mb-12 gap-6">
           <div>
@@ -325,13 +326,13 @@ function App() {
               </span>
             </p>
 
-            <h3 className="text-xl font-extrabold text-slate-900 tracking-tight mb-3">
+            <h3 className="text-sm md:text-xl font-extrabold text-slate-900 tracking-tight mb-3">
               {isAdmin 
                 ? "WELCOME BACK, Administrator" 
                 : `WELCOME BACK, ${user?.name || 'Guest User'}! 👋`}
             </h3>
 
-            <h2 className="text-4xl font-black text-slate-800 tracking-tighter leading-[1.25]">
+            <h2 className="text-lg md:text-4xl font-black text-slate-800 tracking-tighter leading-[1.25]">
               Together, We Build 
               <br />
               <span className="text-blue-600">{isAdmin ? "Admin" : "Safer "}</span> Communities
@@ -344,8 +345,8 @@ function App() {
             </p>
           </div>
 
-          {/* --- PROFILE CARD SECTION --- */}
-          <div className="relative group">
+          {/* --- PROFILE CARD SECTION (DESKTOP) --- */}
+          <div className="relative group hidden md:block">
             <img 
               src="/bglogo.jpeg" 
               alt="Shield Background" 
@@ -361,7 +362,7 @@ function App() {
             
             <div className="flex items-center gap-4 bg-white/80 backdrop-blur-md p-2.5 pr-8 rounded-full shadow-lg border border-white relative z-10">
               <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-black text-sm border-2 border-white shadow-md uppercase">
-                {isAdmin ? "AD" : (user?.name ? user.name.substring(0, 2) : 'GU')}
+                {isAdmin ? "A" : (user?.name ? user.name.substring(0, 1) : 'G')}
               </div>
               
               <div className="text-left">
@@ -387,6 +388,17 @@ function App() {
                   </button>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* --- MOBILE PROFILE CIRCLE (TOP RIGHT) --- */}
+          <div className="md:hidden fixed top-6 right-6 z-50">
+            <div 
+              onClick={(user || isAdmin) ? handleLogout : () => setActiveTab('Log in/Sign up')}
+              className="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-black text-xl border-3 border-white shadow-lg cursor-pointer hover:shadow-xl hover:scale-110 transition-all uppercase"
+              title={(user || isAdmin) ? "Click to logout" : "Click to login"}
+            >
+              {isAdmin ? "A" : (user?.name ? user.name.substring(0, 1) : "G")}
             </div>
           </div>
         </header>
@@ -868,6 +880,32 @@ function App() {
 
         </AnimatePresence>
       </main>
+
+      {/* --- MOBILE BOTTOM NAVBAR --- */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-white/10 z-40 shadow-2xl">
+        <div className="flex justify-around items-center h-20">
+          {[
+            { id: 'Dashboard', icon: <FontAwesomeIcon icon={faThLarge} /> },
+            { id: 'Reports', icon: <FontAwesomeIcon icon={faFileAlt} /> },
+            { id: 'Map', icon: <FontAwesomeIcon icon={faMapMarkedAlt} /> },
+            { id: 'Log in/Sign up', icon: <FontAwesomeIcon icon={faUserCircle} /> }
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all duration-300 ${
+                activeTab === item.id
+                  ? 'text-blue-400 bg-blue-600/10'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+              title={item.id}
+            >
+              <span className="text-xl">{item.icon}</span>
+              <span className="text-[10px] font-bold uppercase tracking-tight">{item.id === 'Log in/Sign up' ? 'Login' : item.id}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
     </div>
   )
 }
