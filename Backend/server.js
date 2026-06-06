@@ -25,15 +25,36 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Database Connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected Successfully!"))
-  .catch((err) => console.log("❌ Connection Error:", err));
+const mongoUri = process.env.MONGO_URI;
+if (!mongoUri) {
+  console.error('❌ MONGO_URI is not defined. Please add it to Backend/.env.');
+  process.exit(1);
+}
+
+mongoose.set('strictQuery', false);
+
+mongoose.connect(mongoUri, {
+  serverSelectionTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+})
+  .then(() => {
+    console.log('✅ MongoDB Connected Successfully!');
+
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => console.log(`🚀 Server started on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB Connection Error:', err.message || err);
+    console.error('   Hint: check network connectivity, Atlas IP access list, and MONGO_URI settings.');
+    process.exit(1);
+  });
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ MongoDB runtime connection error:', err.message || err);
+});
 
 app.get('/', (req, res) => {
     res.send('CivicShield Backend is Running!');
 });
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`🚀 Server started on port ${PORT}`));
 
 module.exports = app;
